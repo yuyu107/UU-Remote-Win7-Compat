@@ -8,6 +8,16 @@ Community research utility to test the **client-side OS-version checks** that pr
 
 A Windows 7 SP1 x64 user successfully used the normal remote session's video, keyboard, mouse, audio, fullscreen and quality controls after applying the patch. The cloud-PC entry point proceeded to its queue instead of showing the Windows 7 block. **The full cloud-PC session has not been independently verified.** Two known executable builds passed offline patch-and-restore tests. Future builds are not guaranteed.
 
+## Windows 7: an OS-version block is not proof of an incompatible API
+
+**In the tested UU Remote builds, the Windows 7 warning was triggered by an explicit client-side OS-version check before starting a remote session, not by a failure after calling an unsupported Windows API.** Using x64dbg to change that check's result allowed a real Windows 7 SP1 x64 remote session: video, keyboard, mouse, scroll wheel, audio, fullscreen, and quality controls worked. The standalone compatibility patch was also tested successfully on another Windows 7 machine.
+
+This demonstrates that **the tested core remote-control features are not inherently impossible on Windows 7**. However, this is **not** evidence that the entire product has no newer Windows API dependencies. The separate uuyc-mux.exe component directly imports Windows 8+ functions such as WaitOnAddress, WakeByAddressSingle, WakeByAddressAll, and GetSystemTimePreciseAsFileTime. Their feature-path impact has not been fully determined. The main executable and streamer library had no such direct imports in the limited list checked, but dynamic or indirect dependencies remain possible. Windows 7 supports Direct3D 11 and DXGI 1.1; later graphics interfaces and optional drivers may still require newer Windows versions.
+
+Cloud PC was only verified to reach the queue after bypassing the local block, **not** to complete a session. Other features, GPUs, long-term stability, and future builds remain unverified. This project documents **observed compatibility of particular functions in particular builds**, not complete or official Windows 7 support.
+
+Microsoft references: [Direct3D 11](https://learn.microsoft.com/en-us/windows/win32/direct3d11), [WaitOnAddress](https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitonaddress), [GetSystemTimePreciseAsFileTime](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getsystemtimepreciseasfiletime).
+
 ## Usage
 
 1. Fully quit UU Remote and any attached debugger.
