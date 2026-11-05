@@ -1,0 +1,14 @@
+# Proprietary software / user data must not enter the repository
+GameViewer.exe
+GameViewer*.exe
+*.Win7Original.bak
+*.Win7V3Stage.tmp
+*.Win7V3Swap.tmp
+*.Win7V3Verify.tmp
+*.log
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
