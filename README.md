@@ -5,6 +5,25 @@
 > [!IMPORTANT]
 > 这是社区兼容性项目，**不是网易 UU 官方补丁**。项目不附带 UU 远程安装包、`GameViewer.exe` 或其他官方二进制文件；请自行合法获取客户端。补丁会使被修改 EXE 的数字签名失效，使用前务必备份。
 
+## 为什么 Win7 会被拦截？版本限制与 API 兼容性是两回事
+
+**已实测确认：在本项目测试的 UU 远程客户端版本中，“Windows 7 设备暂不支持发起远控”是由客户端主动执行的本地系统版本判断触发的，并不是远控引擎调用某个 Win7 不存在的 API 后才出现的错误。**
+
+研究过程：在 Windows 7 SP1 x64 上点击发起远控，程序在开始连接前立即弹出限制提示。通过 x64dbg 追踪到发起端版本检查，Win7 上检查结果为不通过；临时修改判断结果后，成功建立真实远控连接，并实测画面、键盘、鼠标、滚轮、远程声音、全屏和画质调节均正常。后续 v3 兼容补丁也已在 Windows 7 实体机上验证相关功能可用。
+
+**这证明：至少对已测试的客户端构建，上述基础远控功能并非技术上无法在 Win7 使用，原先的入口限制是实际存在的。**
+
+但是，**不能据此声称 UU 远程全部组件都不依赖新版 Windows API**：
+
+- 主程序 GameViewer.exe 和 streamer.dll 的静态检查未在指定的 Win8+ API 清单中发现相应直接导入；这不等于排除了动态加载或间接调用。
+- 安装目录中的其他组件，例如 uuyc-mux.exe，确实直接导入 WaitOnAddress、WakeByAddressSingle、WakeByAddressAll 和 GetSystemTimePreciseAsFileTime。这些函数最低支持 Windows 8。尚未确认这些依赖在具体功能中何时加载，不能凭它们推断普通远控必定不能运行。
+- Windows 7 本身支持 Direct3D 11 和 DXGI 1.1，因此“采用 D3D11 / DXGI”也不能直接证明必须使用 Windows 8/10；但较新的图形接口、驱动及其他功能仍可能不受支持。
+- 云电脑目前只验证成功解除排队前的拦截、进入队列；完整云电脑会话、未测试功能、其他显卡和后续客户端版本仍不能保证。
+
+**准确结论是：被主动版本检查阻止的部分功能，经实测可以在 Win7 上正常运行；并非“整个客户端完全兼容 Win7”，也不代表网易官方继续支持 Win7。**
+
+参考微软文档：[Direct3D 11 最低支持 Windows 7](https://learn.microsoft.com/en-us/windows/win32/direct3d11)、[WaitOnAddress 最低支持 Windows 8](https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitonaddress)、[GetSystemTimePreciseAsFileTime 最低支持 Windows 8](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getsystemtimepreciseasfiletime)。详见 [技术说明](docs/TECHNICAL.md)。
+
 ## 已验证的进展
 
 | 项目 | 结果 | 说明 |
