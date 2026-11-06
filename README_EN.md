@@ -4,6 +4,18 @@ Community research utility to test the **client-side OS-version checks** that pr
 
 **Not affiliated with or endorsed by NetEase or UU Remote.** This repository contains scripts and documentation only; it never distributes any proprietary UU Remote binary.
 
+## Supported architectures — please read before installing
+
+| Operating system | Status | Reason |
+| --- | --- | --- |
+| **Windows 7 SP1 x64 (64-bit)** | ✅ Tested core remote-control features | The patch targets recognized 64-bit client builds |
+| **Windows 7 SP1 x86 (32-bit)** | ❌ **Unsupported** | The tested installation contains 64-bit main and service executables; no complete x86 remote-control build was found |
+| Other Windows releases | Not fully tested by this project | No compatibility guarantee |
+
+**The 32-bit issue is not just an OS-version block.** On Windows 7 SP1 x86, the installer failed to start its service with Windows error **216** (executable machine-type mismatch). Windows Service Control Manager event **7000** confirmed that the installed `GameViewerService.exe` was an AMD64 executable. The desktop shortcut's `GameViewer.exe` also could not launch. An inventory of the installed files found x64 main, service, server, streaming and supporting binaries; the few x86 utilities are not a usable 32-bit client.
+
+Unlike the Windows 7 x64 local version check bypass, patching a few bytes cannot make a 64-bit executable run on 32-bit Windows. **This project supports x64 client builds only and does not provide or plan an x86 port.** This conclusion applies to the tested installation package; it does not establish whether unrelated or historic x86 builds ever existed.
+
 ## Observed results
 
 A Windows 7 SP1 x64 user successfully used the normal remote session's video, keyboard, mouse, audio, fullscreen and quality controls after applying the patch. The cloud-PC entry point proceeded to its queue instead of showing the Windows 7 block. **The full cloud-PC session has not been independently verified.** Two known executable builds passed offline patch-and-restore tests. Future builds are not guaranteed.
