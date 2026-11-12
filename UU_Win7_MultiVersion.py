@@ -17,6 +17,9 @@ KNOWN = {
     '8f1390b33bf003c543eab575aea2299d84e25a753ceb92faba751953844ef10a': ('tested', 'ORIGINAL'),
     '97ab3d5803cc0dc4040f82f0b1c20a09b7d361824ad0faa7a0e35ece3692c1b3': ('tested', 'V1'),
     '23c5e9ab91d7a5eb4e4187cf1f384a62a2bab860af6458c1dbacf77ec21aebc2': ('tested', 'V2'),
+    '8781857cc8d1b0a037853c2132b2982492002c2ae946bd82fd5ab4f2893ab1a3': ('recent-tested', 'ORIGINAL'),
+    '0f7d8c4e4b304859f047ab5bd0ea82e4042b93de110ef783efed37ebdad87e4a': ('recent-tested', 'V1'),
+    '8da352a0c057f2e38c5f21785dafe4e3cab6d284f32209220e2d17b3f48c8751': ('recent-tested', 'V2'),
 }
 MAIN_ANCHOR = bytes.fromhex('0F85E1000000498B4D18488B01FF90A0000000')
 COMMON_ANCHOR = bytes.fromhex('84C07417837C2420067709750E837C2424027207B0014883C438C3')
