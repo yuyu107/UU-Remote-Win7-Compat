@@ -1,0 +1,122 @@
+name: "兼容性问题反馈"
+description: "反馈 Windows 7 x64 下补丁检测、安装、恢复或发起远控时的问题"
+title: "[兼容性] "
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈！请尽可能填写以下信息，方便定位问题。
+
+        **支持范围：** 当前项目只针对 Windows 7 SP1 **64 位（x64）**。Windows 7 **32 位（x86）不支持**；当前 UU 远程主程序和服务为 x64，错误码 216 属于架构不兼容，无法靠此补丁解决。
+
+        **隐私与文件安全：** 请勿上传网易 UU 官方 EXE、DLL、安装包、远控码、设备 ID、登录信息或未经脱敏的完整日志。仅需文本检测结果与 SHA-256。
+
+  - type: dropdown
+    id: windows
+    attributes:
+      label: "Windows 版本与架构"
+      description: "请在「计算机 → 属性」中确认系统位数；本补丁仅支持 Windows 7 x64。"
+      options:
+        - "Windows 7 SP1 64 位（x64）"
+        - "Windows 7 SP1 32 位（x86，不支持）"
+        - "Windows 7 其他版本"
+        - "Windows 8 / 8.1 64 位"
+        - "其他 Windows 系统"
+    validations:
+      required: true
+
+  - type: input
+    id: uu_version
+    attributes:
+      label: "UU 远程版本"
+      description: "可以从客户端或安装包信息中查看；不知道可留空。"
+      placeholder: "例如：4.45.1"
+
+  - type: input
+    id: exe_size
+    attributes:
+      label: "GameViewer.exe 文件大小（字节）"
+      description: "请填写实际安装的客户端主体 GameViewer.exe 的文件大小，不是整个安装包。"
+      placeholder: "例如：73768952"
+
+  - type: input
+    id: sha256
+    attributes:
+      label: "GameViewer.exe 的 SHA-256"
+      description: "可以直接复制 Check_Win7.cmd 输出中的 SHA256 行；不用上传 EXE。"
+      placeholder: "64 位十六进制 SHA-256，未知可留空"
+
+  - type: dropdown
+    id: stage
+    attributes:
+      label: "问题发生在哪一步"
+      options:
+        - "Check 检测"
+        - "Apply 安装补丁"
+        - "Restore 恢复原版"
+        - "启动 UU 远程"
+        - "发起普通远控 / 连接中"
+        - "普通远控连接成功后的操作"
+        - "云电脑入口 / 排队（会话未全面验证）"
+        - "其他情况"
+    validations:
+      required: true
+
+  - type: textarea
+    id: check_output
+    attributes:
+      label: "Check_Win7.cmd 检测输出"
+      description: "建议包含 State、Profile、SHA256、Signature main / common、Original backup；请先移除本地用户名、个人路径等敏感信息。"
+      placeholder: |
+        State: ORIGINAL
+        Profile: other build (structural detection only)
+        Signature main: 1 match(es), file offset ...
+        Signature common: 1 match(es), file offset ...
+        Original backup: not found
+      render: shell
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: "错误提示与复现步骤"
+      description: "请写明具体错误、实际发生的现象，以及如何重现。"
+      placeholder: |
+        1. 退出 UU 远程后运行……
+        2. 点击……
+        3. 出现错误提示……
+        预期：……
+        实际：……
+    validations:
+      required: true
+
+  - type: dropdown
+    id: observed
+    attributes:
+      label: "已经实际测试过的功能（可多选）"
+      description: "只勾选亲自验证的功能；云电脑进入排队不等于完整会话成功。"
+      multiple: true
+      options:
+        - "普通远控连接成功"
+        - "远控画面显示"
+        - "键盘 / 鼠标 / 滚轮"
+        - "远程声音"
+        - "全屏 / 画质调节"
+        - "云电脑进入排队"
+        - "尚未成功测试任何功能"
+
+  - type: textarea
+    id: details
+    attributes:
+      label: "其他补充信息"
+      description: "可以补充是否用过旧补丁、当前备份状态、脱敏截图等；无需上传官方程序文件。"
+      placeholder: "可选"
+
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: "提交前确认"
+      options:
+        - label: "我确认没有上传网易 UU 官方二进制文件、远控码、登录凭据或其他敏感信息。"
+          required: true
