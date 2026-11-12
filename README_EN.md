@@ -4,13 +4,12 @@ Community research utility to test the **client-side OS-version checks** that pr
 
 **Not affiliated with or endorsed by NetEase or UU Remote.** This repository contains scripts and documentation only; it never distributes any proprietary UU Remote binary.
 
-## Supported architectures — please read before installing
+## Windows 7 compatibility — please check your system architecture
 
 | Operating system | Status | Reason |
 | --- | --- | --- |
 | **Windows 7 SP1 x64 (64-bit)** | ✅ Tested core remote-control features | The patch targets recognized 64-bit client builds |
 | **Windows 7 SP1 x86 (32-bit)** | ❌ **Unsupported** | The tested installation contains 64-bit main and service executables; no complete x86 remote-control build was found |
-| Other Windows releases | Not fully tested by this project | No compatibility guarantee |
 
 **The 32-bit issue is not just an OS-version block.** On Windows 7 SP1 x86, the installer failed to start its service with Windows error **216** (executable machine-type mismatch). Windows Service Control Manager event **7000** confirmed that the installed `GameViewerService.exe` was an AMD64 executable. The desktop shortcut's `GameViewer.exe` also could not launch. An inventory of the installed files found x64 main, service, server, streaming and supporting binaries; the few x86 utilities are not a usable 32-bit client.
 
