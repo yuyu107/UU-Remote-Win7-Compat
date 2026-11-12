@@ -17,7 +17,7 @@ Unlike the Windows 7 x64 local version check bypass, patching a few bytes cannot
 
 ## Observed results
 
-A Windows 7 SP1 x64 user successfully used the normal remote session's video, keyboard, mouse, audio, fullscreen and quality controls after applying the patch. The cloud-PC entry point proceeded to its queue instead of showing the Windows 7 block. **The full cloud-PC session has not been independently verified.** Two known executable builds passed offline patch-and-restore tests. Future builds are not guaranteed.
+A Windows 7 SP1 x64 user successfully used the normal remote session's video, keyboard, mouse, audio, fullscreen and quality controls after applying the patch. The cloud-PC entry point proceeded to its queue instead of showing the Windows 7 block. **The full cloud-PC session has not been independently verified.** Two earlier executable builds passed offline patch-and-restore tests; a third user-tested build has matching original and patched binaries verified byte-for-byte. Future builds are not guaranteed.
 
 ## Windows 7: an OS-version block is not proof of an incompatible API
 
