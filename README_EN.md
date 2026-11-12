@@ -39,7 +39,7 @@ Microsoft references: [Direct3D 11](https://learn.microsoft.com/en-us/windows/wi
 
 These Windows 7 launchers use Windows Script Host, `certutil.exe`, MSXML6 and ADODB; no Python or PowerShell installation is necessary. The Python script is an optional reference/test implementation.
 
-The tool searches unique code signatures inside the `.text` section and checks file state rather than applying hard-coded offsets. Unknown matching builds require explicit confirmation; ambiguous builds are rejected.
+The tool searches unique code signatures inside the `.text` section and checks file state rather than applying hard-coded offsets. Unknown structurally matching builds show a Simplified Chinese Yes/No confirmation dialog (No selected by default); no SHA-prefix typing is required. Ambiguous builds are still rejected. The Windows 7 CMD/VBScript workflow now presents Simplified Chinese status and error messages while retaining machine-readable state labels.
 
 **Warning:** Patching invalidates the original binary's digital signature, and updates/integrity checks may undo or reject the change. Use only on software copies you are legally entitled to modify. This project does not alter accounts, authentication, queueing or billing.
 
