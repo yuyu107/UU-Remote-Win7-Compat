@@ -10,6 +10,10 @@ Const OLD_V2       = "e3ddd6ca6c291874116a8373ac52801767b5448a3be06230c404c5e7af
 Const NEW_ORIGINAL = "8f1390b33bf003c543eab575aea2299d84e25a753ceb92faba751953844ef10a"
 Const NEW_V1       = "97ab3d5803cc0dc4040f82f0b1c20a09b7d361824ad0faa7a0e35ece3692c1b3"
 Const NEW_V2       = "23c5e9ab91d7a5eb4e4187cf1f384a62a2bab860af6458c1dbacf77ec21aebc2"
+' Build C (verified original and patched binary; 64-bit Windows 7 remote-control user-tested).
+Const RECENT_ORIGINAL = "8781857cc8d1b0a037853c2132b2982492002c2ae946bd82fd5ab4f2893ab1a3"
+Const RECENT_V1       = "0f7d8c4e4b304859f047ab5bd0ea82e4042b93de110ef783efed37ebdad87e4a"
+Const RECENT_V2       = "8da352a0c057f2e38c5f21785dafe4e3cab6d284f32209220e2d17b3f48c8751"
 Const MAIN_ORIG = "84C0"
 Const MAIN_PATCH = "0C01"
 Const COMMON_ORIG = "32C0"
@@ -106,6 +110,7 @@ Function BuildName(hash)
     Select Case LCase(hash)
         Case OLD_ORIGINAL, OLD_V1, OLD_V2: BuildName = "earlier archive build (known)"
         Case NEW_ORIGINAL, NEW_V1, NEW_V2: BuildName = "Win7-tested build (known)"
+        Case RECENT_ORIGINAL, RECENT_V1, RECENT_V2: BuildName = "new Win7-tested build (known)"
         Case Else: BuildName = "other build (structural detection only)"
     End Select
 End Function
@@ -116,7 +121,9 @@ Function KnownBuild(d)
     KnownBuild = (h = OLD_ORIGINAL And st = "ORIGINAL") Or _
       (h = OLD_V1 And st = "V1") Or (h = OLD_V2 And st = "V2") Or _
       (h = NEW_ORIGINAL And st = "ORIGINAL") Or _
-      (h = NEW_V1 And st = "V1") Or (h = NEW_V2 And st = "V2")
+      (h = NEW_V1 And st = "V1") Or (h = NEW_V2 And st = "V2") Or _
+      (h = RECENT_ORIGINAL And st = "ORIGINAL") Or _
+      (h = RECENT_V1 And st = "V1") Or (h = RECENT_V2 And st = "V2")
 End Function
 
 Sub ConfirmUnknown(hash)
@@ -330,6 +337,8 @@ Sub CheckStaged(before, staged, desired)
                 If desired = "V2" And d("sha256") <> OLD_V2 Then Die "Known old-build staged SHA256 mismatch."
             Case NEW_ORIGINAL, NEW_V1, NEW_V2
                 If desired = "V2" And d("sha256") <> NEW_V2 Then Die "Known tested-build staged SHA256 mismatch."
+            Case RECENT_ORIGINAL, RECENT_V1, RECENT_V2
+                If desired = "V2" And d("sha256") <> RECENT_V2 Then Die "Known recent-build staged SHA256 mismatch."
         End Select
     End If
 End Sub
