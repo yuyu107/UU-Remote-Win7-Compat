@@ -160,10 +160,11 @@ def run(action,target,assume_yes=False):
         if info['state']=='V2':
             print('Already patched');return
         if not info['known'] and not assume_yes:
-            expected='APPLY '+info['sha'][:8].upper()
-            print('Unknown build: exact binary compatibility is NOT verified; digital signature becomes invalid.')
-            if input(f'Type {expected} to proceed: ').strip().upper()!=expected:
-                raise ValueError('cancelled')
+            print('提示：当前文件哈希未登记，但两个代码特征均匹配；无法保证实际兼容性。')
+            print('继续前会备份原版；修改后 EXE 的原始数字签名将失效。')
+            answer = input('是否继续尝试修补？输入 Y 确认，其他任何输入取消 [y/N]：').strip().lower()
+            if answer != 'y':
+                raise ValueError('用户已取消，未修改目标文件')
         if backup.exists():
             check_backup(info,backup,rev,target)
         else:
