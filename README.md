@@ -52,7 +52,7 @@
 
 ## 下载与运行
 
-从 GitHub 项目的 **Releases** 下载 `UU-Remote-Win7-Compat_v3.0.0.zip`，解压后使用。无需安装 Python 或 PowerShell；在 Windows 7 上使用内置 `cscript.exe`、`certutil.exe`、MSXML6 和 ADODB。
+下载并解压 `UU-Remote-Win7-Compat_v3.1.0.zip`（**v3.1.0 正式包已制作完成，待上传至 GitHub Releases**；GitHub Releases 当前仍提供 v3.0.0）。无需安装 Python 或 PowerShell；在 Windows 7 上使用内置 `cscript.exe`、`certutil.exe`、MSXML6 和 ADODB。
 
 1. 完全退出 UU 远程（包括托盘进程），并关闭 x64dbg 等可能占用 EXE 的程序。
 2. 找到安装目录内**真正的** `GameViewer.exe`（64 位），**拖到 `Check_Win7.cmd` 上**，先看 `State`、`SHA256` 和两项 `Signature`。
