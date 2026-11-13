@@ -52,10 +52,24 @@
 
 ## 下载与运行
 
-下载并解压 `UU-Remote-Win7-Compat_v3.1.0.zip`（**v3.1.0 正式包已制作完成，待上传至 GitHub Releases**；GitHub Releases 当前仍提供 v3.0.0）。无需安装 Python 或 PowerShell；在 Windows 7 上使用内置 `cscript.exe`、`certutil.exe`、MSXML6 和 ADODB。
+从 [GitHub Releases](https://github.com/yuyu107/UU-Remote-Win7-Compat/releases/tag/v3.1.0) 下载正式版 `UU-Remote-Win7-Compat_v3.1.0.zip` 并解压。无需安装 Python 或 PowerShell；在 Windows 7 上使用内置 `cscript.exe`、`certutil.exe`、MSXML6 和 ADODB。
+
+### 如何找对主程序（很重要）
+
+**安装目录里可能有两个同名的 `GameViewer.exe`，不要直接选安装目录根部的那个。** 我们在一个已测试安装包中观察到：
+
+```text
+C:\Program Files\Netease\GameViewer\GameViewer.exe
+                         ↑ 安装根部的启动器（实测约 10 MB），不是补丁目标
+
+C:\Program Files\Netease\GameViewer\1.0.0.0\GameViewer.exe
+                                 ↑ 版本子目录中的客户端主体（实测约 70 MB）
+```
+
+其中 `1.0.0.0` **只是示例目录名称**，请以自己安装的实际版本目录为准。**文件体积仅用于辅助判断，不能单凭大小保证一定是正确文件。** 新版脚本对已知的“小体积安装根目录启动器”进行检测，发现误选时会停止，并列出一级版本子目录中的同名候选文件；**不会自动替你选择或修改**。
 
 1. 完全退出 UU 远程（包括托盘进程），并关闭 x64dbg 等可能占用 EXE 的程序。
-2. 找到安装目录内**真正的** `GameViewer.exe`（64 位），**拖到 `Check_Win7.cmd` 上**，先看 `State`、`SHA256` 和两项 `Signature`。
+2. 打开 UU 远程安装目录，进入版本子目录，找到其中的 **64 位客户端主体 `GameViewer.exe`**。将其**拖到 `Check_Win7.cmd` 上**，先确认 `State`、`SHA256` 和两项 `Signature`。若显示 `UNSUPPORTED`，请先复核是否选错 EXE；如果两处签名未唯一匹配，不能强行修补。
 3. 如果显示 `ORIGINAL` 或 `V1`，再将同一 EXE 拖到 `Apply_Win7.cmd`；如果已经是 `V2`，无需重复修改。
 4. 看到 `SUCCESS` 后重新启动 UU 远程，测试连接。原文件的备份位于 `GameViewer.exe.Win7Original.bak`。
 5. 如需恢复，退出客户端后将同一 EXE 拖到 `Restore_Win7.cmd`，使用经验证的备份还原。
@@ -67,7 +81,7 @@
 - `ORIGINAL`：对应检查点尚未修改。
 - `V1`：仅普通远控入口的检查点已修改。
 - `V2`：两个检查点均已修改（v3 工具输出的完整补丁状态）。
-- `UNSUPPORTED`：未识别到安全的唯一修改位置；**不要强行套用旧偏移**。
+- `UNSUPPORTED`：未识别到安全的唯一修改位置；**先确认是不是误选了安装根目录的启动器**，再排查版本差异；不要强行套用旧偏移。
 
 ## 技术原理
 
