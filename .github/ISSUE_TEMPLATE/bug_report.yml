@@ -32,7 +32,7 @@ body:
       value: |
         ### 下面三项信息怎么获取？
         1. **UU 远程版本：** 打开 UU 远程主程序 → 点击右上角菜单 → 选择「关于」，查看版本号。
-        2. **GameViewer.exe 文件大小和 SHA-256：** 找到 UU 远程安装目录内真正的客户端主体 `GameViewer.exe`（通常位于版本子目录中，**不是**根目录的启动器），将这个 EXE 文件**拖到补丁包中的 `Check_Win7.cmd` 上**，即可显示 `Size:` 和 `SHA256:`。
+        2. **GameViewer.exe 文件大小和 SHA-256：** 找到 UU 远程安装目录内真正的客户端主体 `GameViewer.exe`（通常位于版本子目录中，**不是**安装根目录的小体积启动器，例如 `...\\Netease\\GameViewer\\1.0.0.0\\GameViewer.exe`，目录名仅作示例），将这个 EXE 文件**拖到补丁包中的 `Check_Win7.cmd` 上**，即可显示 `Size:` 和 `SHA256:`。
         3. **复制方式：** 将 `Size:` 后面的纯数字填入“文件大小”，将 `SHA256:` 后面的 64 位十六进制字符串填入“SHA-256”。也可以直接把脱敏后的完整检测输出放到下面的“Check_Win7.cmd 检测输出”框，**不需要重复填写文件大小和哈希**。
 
         若无法运行 Check，也可以右键真正的 `GameViewer.exe` →「属性」，从“大小”中的括号内读取字节数。**不要上传 EXE 文件本身。**
@@ -48,14 +48,14 @@ body:
     id: exe_size
     attributes:
       label: "GameViewer.exe 文件大小（字节）"
-      description: "将真正的客户端主体 GameViewer.exe 拖到 Check_Win7.cmd 上，复制 Size: 后面的字节数；若已粘贴完整检测输出，可留空。"
+      description: "将版本子目录中真正的客户端主体 GameViewer.exe 拖到 Check_Win7.cmd，复制 Size: 后的数字。不要选安装根目录约 10 MB 的启动器；文件大小仅供参考。若已粘贴完整输出可留空。"
       placeholder: "例如：73768952"
 
   - type: input
     id: sha256
     attributes:
       label: "GameViewer.exe 的 SHA-256"
-      description: "将真正的客户端主体 GameViewer.exe 拖到 Check_Win7.cmd 上，复制 SHA256: 后面的 64 位哈希；若已粘贴完整检测输出，可留空。不要上传 EXE。"
+      description: "将版本子目录中真正的客户端主体 GameViewer.exe 拖到 Check_Win7.cmd，复制 SHA256: 后的完整哈希；若已粘贴完整检测输出可留空。不要上传 EXE。"
       placeholder: "64 位十六进制 SHA-256，未知可留空"
 
   - type: dropdown
