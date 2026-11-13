@@ -31,8 +31,10 @@ Microsoft references: [Direct3D 11](https://learn.microsoft.com/en-us/windows/wi
 
 ## Usage
 
+**Choose the correct executable:** There may be two different files both named `GameViewer.exe`. In tested installations, `C:\Program Files\Netease\GameViewer\GameViewer.exe` was a **small launcher (about 10 MB)** and **not** the patch target. The actual 64-bit client was `C:\Program Files\Netease\GameViewer\1.0.0.0\GameViewer.exe` (**about 70 MB**). The version folder name is only an example and may differ. **Do not rely on file size alone.** The revised source detects the observed small root launcher, refuses to change it, and lists available version-subfolder candidates; it does not automatically choose a file.
+
 1. Fully quit UU Remote and any attached debugger.
-2. Drag the installed **64-bit** `GameViewer.exe` onto `Check_Win7.cmd`.
+2. Locate the **64-bit client executable inside the actual version subfolder** and drag it onto `Check_Win7.cmd`. Inspect `State` and both `Signature` counts before patching.
 3. If appropriate, drag it onto `Apply_Win7.cmd`; keep the generated `GameViewer.exe.Win7Original.bak`.
 4. Restart UU Remote and verify the functionality you need.
 5. Quit the client and use `Restore_Win7.cmd` to revert from the verified original backup.
