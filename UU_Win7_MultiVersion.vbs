@@ -33,6 +33,12 @@ If action <> "check" And action <> "apply" And action <> "restore" Then Die ZH("
 target = fso.GetAbsolutePathName(Trim(WScript.Arguments(1)))
 If LCase(fso.GetFileName(target)) <> "gameviewer.exe" Then Die ZH("53EA80FD59047406002000470061006D0065005600690065007700650072002E0065007800653002")
 If Not fso.FileExists(target) Then Die ZH("627E4E0D523065874EF6FF1A") & target
+' Avoid modifying the small launcher in the installation root.
+' Never auto-pick a candidate: the user must inspect the selected versioned EXE first.
+If IsInstallerRootLauncher(target) Then
+    ShowVersionedExecutableHints target
+    WScript.Quit 2
+End If
 backup = target & ".Win7Original.bak"  ' also used by previous v1/v2 tools
 stage = target & ".Win7V3Stage.tmp"
 swapPath = target & ".Win7V3Swap.tmp"
@@ -119,6 +125,49 @@ Function StateName(state)
         Case Else: StateName = ZH("65E06CD55B8951688BC6522BFF0C62D27EDD4FEE6539")
     End Select
 End Function
+
+' A frequent mistake is selecting ...\\Netease\\GameViewer\\GameViewer.exe
+' (about 10 MB in the tested installation) instead of its version subfolder's
+' GameViewer.exe (about 70 MB). Sizes are only hints, not validity criteria.
+Function IsInstallerRootLauncher(path)
+    Dim folderPath, parentName, grandParentName, subFolder, candidate, hasVersionExe
+    IsInstallerRootLauncher = False
+    folderPath = fso.GetParentFolderName(path)
+    parentName = LCase(fso.GetFileName(folderPath))
+    If parentName <> "gameviewer" Then Exit Function
+    ' A versioned client can vary in size. Only flag the observed small root launcher.
+    If fso.GetFile(path).Size >= 20971520 Then Exit Function
+    grandParentName = LCase(fso.GetFileName(fso.GetParentFolderName(folderPath)))
+    hasVersionExe = False
+    For Each subFolder In fso.GetFolder(folderPath).SubFolders
+        candidate = fso.BuildPath(subFolder.Path, "GameViewer.exe")
+        If fso.FileExists(candidate) Then
+            hasVersionExe = True
+            Exit For
+        End If
+    Next
+    If grandParentName = "netease" Or hasVersionExe Then IsInstallerRootLauncher = True
+End Function
+
+Sub ShowVersionedExecutableHints(launcher)
+    Dim rootFolder, subFolder, candidate, count
+    rootFolder = fso.GetParentFolderName(launcher)
+    WScript.Echo "ERROR: " & ZH("4F6090094E2D4E865B8988C576EE5F55683990E87684002000470061006D0065005600690065007700650072002E006500780065FF0C5B835F8853EF80FD53EA662F542F52A85668FF0C4E0D80FD752867654FEE88653002")
+    WScript.Echo ZH("5F53524D65874EF659275C0FFF1A") & fso.GetFile(launcher).Size & " " & ZH("5B57828230025DF2505C6B6264CD4F5CFF0C65874EF66CA1670988AB4FEE65393002")
+    WScript.Echo ZH("8BF7653990094E0B65B97248672C5B5076EE5F554E2D7684002000470061006D0065005600690065007700650072002E006500780065FF085B9E964576EE5F55540D79F053EF80FD4E0D540CFF09FF1A")
+    count = 0
+    For Each subFolder In fso.GetFolder(rootFolder).SubFolders
+        candidate = fso.BuildPath(subFolder.Path, "GameViewer.exe")
+        If fso.FileExists(candidate) Then
+            count = count + 1
+            If count <= 15 Then WScript.Echo "  [" & count & "] " & candidate & "  (" & fso.GetFile(candidate).Size & " " & ZH("5B578282") & ")"
+        End If
+    Next
+    If count = 0 Then WScript.Echo ZH("672A57284E007EA75B5076EE5F554E2D627E52305019900965874EF630028BF7572800200055005500208FDC7A0B5B8988C565874EF659394E2D7EE77EED67E5627E3002")
+    If count > 15 Then WScript.Echo ZH("501990098F83591AFF0C4EC5521751FA524D00200031003500204E2A3002")
+    WScript.Echo ZH("51485C0690094E2D76845019900965874EF662D6523000200043006800650063006B005F00570069006E0037002E0063006D0064FF0C68C067E50020005300740061007400650020662F54264E3A0020004F0052004900470049004E0041004C30010056003100206216002000560032FF0C4E144E2498790020005300690067006E0061007400750072006500205339914D657057474E3A002000313002")
+    WScript.Echo ZH("82E56709591A4E2A7248672C76EE5F55FF0C8BF7786E8BA400200055005500208FDC7A0B5F53524D5B9E96454F7F752876847248672CFF1B520752FF76F276EE4FEE8865624067095019900965874EF63002")
+End Sub
 
 Function IIfString(condition, yesValue, noValue)
     If condition Then IIfString = yesValue Else IIfString = noValue
