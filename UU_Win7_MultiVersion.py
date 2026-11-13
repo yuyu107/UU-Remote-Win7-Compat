@@ -142,6 +142,20 @@ def run(action,target,assume_yes=False):
     target=Path(target).resolve()
     if target.name.lower()!='gameviewer.exe':raise ValueError('target must be named GameViewer.exe')
     if not target.is_file():raise ValueError('target not found')
+    # The observed small EXE in the installation root is a launcher, not the
+    # 64-bit client in a versioned subfolder. Never auto-select or modify another.
+    if target.parent.name.lower() == 'gameviewer' and target.stat().st_size < 20 * 1024 * 1024:
+        candidates = [
+            p for p in target.parent.iterdir()
+            if p.is_dir() and (p / 'GameViewer.exe').is_file()
+        ]
+        if target.parent.parent.name.lower() == 'netease' or candidates:
+            hints = '\\n'.join('  ' + str(p / 'GameViewer.exe') for p in candidates[:15])
+            raise ValueError(
+                '疑似选中了安装根目录的启动器，已停止操作。'
+                '请选择版本子目录中的 GameViewer.exe，先运行 check 验证。'
+                + ('\\n可检查的候选文件：\\n' + hints if hints else '')
+            )
     backup=Path(str(target)+'.Win7Original.bak')
     stage=Path(str(target)+'.Win7V3Stage.tmp')
     swap=Path(str(target)+'.Win7V3Swap.tmp')
